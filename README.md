@@ -1,7 +1,6 @@
 # Code Overview
 
-Code for Cox proportional hazards regression of a right-censored clinical outcome on an interval-censored preclinical onset time, estimated via EM algorithm with profile likelihood standard errors.
-
+This repository contains code for reproducing the simulation studies in the paper. The proposed method fits a Cox proportional hazards model for a right-censored clinical outcome with an interval-censored preclinical onset time. Estimation is carried out using an EM algorithm, and standard errors are obtained from profile likelihood.
 ---
 
 ## Repository Structure
