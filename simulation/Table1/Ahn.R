@@ -9,7 +9,7 @@ source("../../Ahn_func/EM_Ahn.R")
 Num_INSTANCES = 1000
 INSTANCES_PER_JOB = 10
 p = 3
-true_alpha  <- c(0.9, 1, -0.5) / 2
+true_alpha  <- c(0.45, 0.5, -0.25)
 true_beta   <- 1
 pointestimate=matrix(0,INSTANCES_PER_JOB*Num_INSTANCES,p+1)
 htsis = matrix(0,INSTANCES_PER_JOB*Num_INSTANCES,2*(p+1))
