@@ -131,13 +131,13 @@ All DGP functions are defined in `data_generation/data_generate.R`. A full simul
 
 ```r
 X  <- draw_X(n, p)                                      # covariates
-TT <- rT_PH_bump(n, X, gamma, c, a, omega, b, tau, sigma)  # IC change point
+TT <- rT_PH_bump(n, X, gamma, c, a, omega, b, tau, sigma)  # Pre-clinical event time
 U  <- draw_examination(n, count = 3, X, psi)            # examination times
-LR <- get_LR(TT, U)                                     # interval (L, R) for TT
-Z  <- draw_Z(n, X, TT, alpha, beta, g_type)             # RC event time
+LR <- get_LR(TT, U)                                     # interval (L, R) for pre-clinical event time
+Z  <- draw_Z(n, X, TT, alpha, beta, g_type)             # outcome event time
 C  <- rexp(n, 1/6)                                      # censoring time
-Y  <- ifelse(Z <= C, Z, C)                              # observed RC time
-delta <- ifelse(Z <= C, 1, 0)                           # RC event indicator
+Y  <- ifelse(Z <= C, Z, C)                              # observed outcome time
+delta <- ifelse(Z <= C, 1, 0)                           # outcome event indicator
 ```
 
 ### Function details
@@ -146,20 +146,16 @@ delta <- ifelse(Z <= C, 1, 0)                           # RC event indicator
 Draws an n × p covariate matrix: `X1 ~ Bernoulli(0.6)`, `X2, X3 ~ TruncNormal(0, 1, -2, 2)`.
 
 **`rT_PH_bump(n, X, gamma, c, a, omega, b, tau, sigma)`**
-Draws change point times `TT` from a proportional hazards model with a bump baseline hazard:
-`Λ₀(t) = c(t − (a/ω)sin(ωt)) + b√(2π)σ [Φ((t−τ)/σ) − Φ(−τ/σ)]`.
-Uses inverse CDF sampling via `uniroot`.
+Draws pre-clinical event times `TT` from a proportional hazards model with a bump baseline hazard.
 
 **`draw_examination(n, count, X, psi)`**
-Draws `count` covariate-dependent examination times per subject. Gap times follow `Exp(1/mean_gap)` where `mean_gap = 8 / exp(X %*% psi)`. First exam is `Uniform(0, 4)`.
+Draws `count` covariate-dependent examination times per subject. 
 
 **`get_LR(TT, U)`**
-Converts examination times `U` and true change point `TT` into interval-censored brackets `(L, R)`:
-- `L` = last examination before `TT` (0 if none)
-- `R` = first examination after or at `TT` (`Inf` if never observed)
+Converts examination times `U` and true pre-clinical event time `TT` into interval-censored brackets `(L, R)`.
 
 **`draw_Z(n, X, TT, alpha, beta, g_type)`**
-Draws RC event times from a proportional hazards model with change-point effect `g(Z, TT)`. Supports `g_type = "indicator"` (closed-form inversion) and `g_type = "relu"` (numerical inversion via `uniroot`).
+Draws outcome event times from a proportional hazards model with preclinical effect `g(Z, TT)`. Supports `g_type = "indicator"` and `g_type = "relu"`.
 
 ---
 
