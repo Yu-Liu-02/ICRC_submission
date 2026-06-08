@@ -6,7 +6,7 @@ This repository contains code for reproducing the simulation studies in the pape
 ## Repository Structure
 
 ```
-ICRC_submission/
+ICSR/
 ├── data_generation/
 │   ├── data_generate.R        # Data-generating functions
 │   └── g_function.R           # g function (indicator / ReLU)
