@@ -302,8 +302,8 @@ All simulation scripts follow the same structure:
 | Script | Method | Key function | SE source |
 |--------|--------|--------------|-----------|
 | `Proposed.R` | Proposed EM | `EM_proposed()` + `variance_est()` | Profile likelihood |
-| `Ahn.R` | Ahn et al. (2018) | Newton–Raphson in `EM_Ahn.R` | `covProbf()` (model-based) |
-| `Goggins.R` | Goggins MCEM | `fit_mcem_interval()` in `MCEM_Goggins.R` | `out$se` from MCEM |
+| `Ahn.R` | Ahn | Newton–Raphson in `EM_Ahn.R` | `covProbf()` |
+| `Goggins.R` | Goggins | `fit_mcem_interval()` in `MCEM_Goggins.R` | `out$se` from MCEM |
 | `Midpoint.R` | Midpoint imputation | `coxph()` with `tt()` | `sqrt(diag(fit$var))` |
 
 True parameter values: γ = (1, 1.5, −1.5), α = (0.45, 0.5, −0.25), **β = 1**, `g_type = "indicator"`.
@@ -312,7 +312,7 @@ True parameter values: γ = (1, 1.5, −1.5), α = (0.45, 0.5, −0.25), **β = 
 
 **Goggins:** MCEM with a Gibbs sampler (C++ backend in `Gibbs.cpp`). Starting values from a Cox model with midpoint imputation. Output is `p+1` columns (α, β).
 
-**Midpoint:** Cox model with time-varying covariate `g(t, midpoint)`. Uses the global `g` function set by `set_g_type()`. Output is `p+1` columns (α, β).
+**Midpoint:** Midpoint imputation replaces the unobserved preclinical event time by the midpoint of the time interval bracketing the event, with right-censored observations treated as having no event. Uses the global `g` function set by `set_g_type()`. Output is `p+1` columns (α, β).
 
 ### Table 2 — ReLU g, β = 0.1
 
@@ -323,7 +323,7 @@ True parameter values: γ = (1, 1.5, −1.5), α = (0.45, 0.5, −0.25), **β = 
 
 True parameter values: γ = (1, 1.5, −1.5), α = (0.45, 0.5, −0.25), **β = 0.1**, `g_type = "relu"`.
 
-Ahn and Goggins are not included in Table 2 as their method do not support the ReLU g function.
+Ahn and Goggins are not included in Table 2 as their methods do not support the ReLU g function.
 
 ### Switching g type in simulations
 
