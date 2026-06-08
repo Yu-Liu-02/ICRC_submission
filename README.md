@@ -1,4 +1,4 @@
-# ICRC Submission — Code Overview
+# Code Overview
 
 Joint model for interval-censored change point (IC) and recurrent event (RC) outcomes, estimated via EM algorithm with profile likelihood variance estimation.
 
