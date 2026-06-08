@@ -47,6 +47,7 @@ To reproduce Table 1, set the working directory to
 
 ```text
 simulation/Table1/
+```
 
 run the scripts in
 
@@ -77,6 +78,7 @@ To reproduce Table 2, set the working directory to
 
 ```text
 simulation/Table1/
+```
 
 run the scripts in
 
