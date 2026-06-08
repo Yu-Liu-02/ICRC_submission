@@ -12,8 +12,8 @@ source("../../Proposed_func/variance_estimation.R")
 
 ##-------------------------------------------##
 n = 1000 # sample size
-Num_INSTANCES = 1
-INSTANCES_PER_JOB = 1
+Num_INSTANCES = 1000
+INSTANCES_PER_JOB = 10
 set_g_type("relu")
 c     <- 0.03
 a     <- 0.99
