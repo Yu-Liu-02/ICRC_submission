@@ -77,7 +77,7 @@ with true parameter value `beta = 1`.
 To reproduce Table 2, set the working directory to
 
 ```text
-simulation/Table1/
+simulation/Table2/
 ```
 
 run the scripts in
