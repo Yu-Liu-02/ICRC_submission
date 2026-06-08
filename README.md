@@ -23,11 +23,14 @@ ICRC_submission/
 │   ├── compile_cpp_mcem.R     # Compiles Gibbs.cpp
 │   └── MCEM_Goggins.R         # Goggins competitor method
 └── simulation/
-    └── Table1/
-        ├── Proposed.R         # Simulation: proposed method
-        ├── Ahn.R              # Simulation: Ahn method
-        ├── Goggins.R          # Simulation: Goggins method
-        └── Midpoint.R         # Simulation: midpoint imputation
+    ├── Table1/
+    │   ├── Proposed.R         # Indicator g, beta = 1
+    │   ├── Ahn.R              # Ahn method
+    │   ├── Goggins.R          # Goggins MCEM
+    │   └── Midpoint.R         # Midpoint imputation, indicator g
+    └── Table2/
+        ├── Proposed.R         # ReLU g, beta = 0.1
+        └── Midpoint.R         # Midpoint imputation, ReLU g
 ```
 
 ---
@@ -115,46 +118,51 @@ Returns:
 
 ## Simulation Scripts
 
-All four simulation scripts in `simulation/Table1/` follow the same structure:
+All simulation scripts follow the same structure:
 
 1. Generate data (`draw_X`, `rT_PH_bump`, `draw_Z`, `draw_examination`, `get_LR`)
 2. Fit the method
 3. Store point estimates in `pe` / `coef` and SEs in `se` / `htsis`
 4. After the loop, print a summary table of **Bias, SE, SEE, CP** for α and β
 
-### True parameter values (all scripts)
-
-| Parameter | Value |
-|-----------|-------|
-| γ | (1, 1.5, −1.5) |
-| α | (0.45, 0.5, −0.25) |
-| β | 1 |
-
-### Alternative methods
+### Table 1 — Indicator g, β = 1
 
 | Script | Method | Key function | SE source |
 |--------|--------|--------------|-----------|
 | `Proposed.R` | Proposed EM | `EM_proposed()` + `variance_est()` | Profile likelihood |
-| `Ahn.R` | Ahn et al. (2018) | Newton–Raphson loop in `EM_Ahn.R` | `covProbf()` (model-based) |
+| `Ahn.R` | Ahn et al. (2018) | Newton–Raphson in `EM_Ahn.R` | `covProbf()` (model-based) |
 | `Goggins.R` | Goggins MCEM | `fit_mcem_interval()` in `MCEM_Goggins.R` | `out$se` from MCEM |
 | `Midpoint.R` | Midpoint imputation | `coxph()` with `tt()` | `sqrt(diag(fit$var))` |
 
-**Ahn:** estimates α and β jointly (no γ; Weibull IC model fit separately via `survreg`). Output is `p+1` columns.
+True parameter values: γ = (1, 1.5, −1.5), α = (0.45, 0.5, −0.25), **β = 1**, `g_type = "indicator"`.
 
-**Goggins:** MCEM with a Gibbs sampler (C++ backend in `Gibbs.cpp`). Starting values are obtained from a Cox model with midpoint imputation. Output is `p+1` columns (α, β).
+**Ahn:** estimates α and β only (Weibull IC model fit separately via `survreg`). Output is `p+1` columns.
 
-**Midpoint:** Cox model with a time-varying covariate `g(t, midpoint)`. Uses the global `g` function, so `set_g_type()` controls whether indicator or ReLU is applied. Output is `p+1` columns (α, β).
+**Goggins:** MCEM with a Gibbs sampler (C++ backend in `Gibbs.cpp`). Starting values from a Cox model with midpoint imputation. Output is `p+1` columns (α, β).
+
+**Midpoint:** Cox model with time-varying covariate `g(t, midpoint)`. Uses the global `g` function set by `set_g_type()`. Output is `p+1` columns (α, β).
+
+### Table 2 — ReLU g, β = 0.1
+
+| Script | Method | Key function | SE source |
+|--------|--------|--------------|-----------|
+| `Proposed.R` | Proposed EM | `EM_proposed()` + `variance_est()` | Profile likelihood |
+| `Midpoint.R` | Midpoint imputation | `coxph()` with `tt()` | `sqrt(diag(fit$var))` |
+
+True parameter values: γ = (1, 1.5, −1.5), α = (0.45, 0.5, −0.25), **β = 0.1**, `g_type = "relu"`.
+
+Ahn and Goggins are not included in Table 2 as they do not support the ReLU g function.
 
 ### Switching g type in simulations
 
-Only `Proposed.R` and `Midpoint.R` use `set_g_type()`. Change the call near the top of each script:
+`Proposed.R` and `Midpoint.R` call `set_g_type()` near the top of the script. Change it to switch scenarios:
 
 ```r
-set_g_type("relu")       # ReLU threshold effect
-set_g_type("indicator")  # Hard threshold effect (default)
+set_g_type("indicator")   # Table 1 setting
+set_g_type("relu")        # Table 2 setting
 ```
 
-`Ahn.R` and `Goggins.R` do not model the threshold effect via g; they assume a simpler parametric structure for the IC event.
+`Ahn.R` and `Goggins.R` do not use `set_g_type()`; they assume a fixed parametric structure for the IC event.
 
 ---
 
