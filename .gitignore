@@ -1,0 +1,20 @@
+# Compiled / binary
+*.so
+*.o
+*.dll
+
+# Rcpp cache
+rcpp_cache_*/
+
+# R workspace / history
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+
+# Simulation results
+*.rds
+*.RDS
+
+# OS
+.DS_Store
