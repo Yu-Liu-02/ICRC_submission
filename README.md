@@ -66,6 +66,8 @@ This must be called before running the EM. Both the R code and the C++ kernels r
 
 ### 3. Prepare data
 
+The `dat` data frame has the following columns, with `X` attached as `dat$X`:
+
 | Variable | Description |
 |----------|-------------|
 | `Y` | Observed outcome event time: `min(Z, C)`, where `Z` is the true outcome event time and `C` is the censoring time |
@@ -74,16 +76,23 @@ This must be called before running the EM. Both the R code and the C++ kernels r
 | `R` | Right endpoint of the interval containing the preclinical event `TT` (first examination after `TT`; `Inf` if never observed) |
 | `X` | n × p covariate matrix |
 
-The expected data structure is a `data.frame` with these columns, and `X` attached as `dat$X`:
+Two additional vectors are required separately:
+
+| Variable | Description |
+|----------|-------------|
+| `t` | Time grid for the pre-clinical event time: sorted unique examination-time endpoints, with the 0 and Inf removed |
+| `s` | Unique observed outcome event times among uncensored subjects |
+
 
 ```r
 dat        <- data.frame(Y = Y, delta = delta, L = LR$L, R = LR$R)
-dat$X      <- X                          # n x p covariate matrix
+dat$X      <- X
+t          <- sort(unique(unlist(LR))); t <- t[c(-1, -length(t))]
+s          <- sort(unique(Y[delta == 1]))
 k.start    <- findInterval(dat$L, t) + 1 # index of first t >= L
 k.end      <- findInterval(dat$R, t)     # index of last  t <= R
 ```
 
-where `t` is the pre-clinical event time grid (interior points of the unique examination times) and `s` is the vector of unique observed outcome event times among uncensored subjects.
 
 ### 4. Initialize parameters
 
