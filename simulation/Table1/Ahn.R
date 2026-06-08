@@ -106,7 +106,7 @@ result <- rbind(
   Bias = colMeans(pointestimate) - true_ab,
   SE   = apply(pointestimate, 2, sd),
   SEE  = sqrt(colMeans(htsis[, (p+2):(2*(p+1))])),
-  CP   = colMeans(htsis[, 1:(p+1)])
+  CP   = colMeans(htsis[, 1:(p+1)] > 0.05)
 )
 colnames(result) <- param_names
 print(round(result, 4))
