@@ -222,7 +222,7 @@ set_g_type("relu")        # Table 2 setting
 
 **R packages:** `Rcpp`, `RcppArmadillo`, `bayess`, `survival`
 
-**C++ compiler:** A C++11-compatible compiler is required by `Rcpp`. `RcppArmadillo` additionally requires a Fortran compiler (`gfortran`) because Armadillo links against LAPACK/BLAS.
+**C++ compiler:** A C++11-compatible compiler is required by `Rcpp`. `RcppArmadillo` additionally requires a Fortran compiler (`gfortran`).
 
 | Platform | C++ | Fortran |
 |----------|-----|---------|
