@@ -1,6 +1,6 @@
 # Code Overview
 
-Joint model for interval-censored change point (IC) and recurrent event (RC) outcomes, estimated via EM algorithm with profile likelihood variance estimation.
+Code for Cox proportional hazards regression of a right-censored clinical outcome on an interval-censored preclinical onset time, estimated via EM algorithm with profile likelihood standard errors.
 
 ---
 
