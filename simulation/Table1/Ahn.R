@@ -17,7 +17,7 @@ for(iter in 1:Num_INSTANCES){
   set.seed(iter)
   for(iter_in in 1:INSTANCES_PER_JOB){
     gamma <- c(1,1.5,-1.5)
-    alpha <- c(0.9,1,-0.5)/2
+    alpha <- c(0.45,0.5,-0.25)
     psi <- c(0.4,0.4,-0.2)
     beta  <- 1
     c     <- 0.03
